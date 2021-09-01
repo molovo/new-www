@@ -1,0 +1,52 @@
+grid($columns, $spacing = false, $align = stretch, $justify = space-between)
+  align-items: $align
+  display: flex
+  flex-wrap: wrap
+  justify-content: $justify
+
+  > *
+    flex: '0 0 %s%' % (100 / $columns)
+
+    if $spacing
+      flex-basis: 'calc(%s% - ((%s / %s) * %s))' % ((100 / $columns) ($columns - 1) $columns $spacing)
+
+      if $justify is not space-between
+        &:nth-of-child(1n)
+          margin-right: $spacing
+
+        &:nth-child({$columns}n)
+          margin-right: 0
+
+first-row($columns)
+  > :nth-child(-n+{$columns})
+    {block}
+
+nth-row($row, $columns)
+  > :nth-child({(($row - 1) * $columns) + 1}),
+  > :nth-child({(($row - 1) * $columns) + 1}) ~ :nth-child(-n+{$columns * row})
+    {block}
+
+nth-last-row($row, $columns)
+  > :nth-last-child(-n+{$columns * $row}):not(:nth-last-child(-n+{$columns * ($row - 1)}))
+    {block}
+
+last-row($columns)
+  > :nth-child({$columns}n+1):nth-last-child(-n+{$columns}),
+  > :nth-child({$columns}n+1):nth-last-child(-n+{$columns}) ~ *
+    {block}
+
+first-column($columns)
+  > :nth-child({$columns}n+1)
+    {block}
+
+nth-column($column, $columns)
+  > :nth-child({$columns}n+{$column})
+    {block}
+
+nth-last-column($column, $columns)
+  > :nth-child({$columns}n+{$columns + 1 - $column})
+    {block}
+
+last-column($columns)
+  > :nth-child({$columns}n)
+    {block}

@@ -1,0 +1,69 @@
+.footer
+  background: $colors.gray
+  color: $colors.black
+  margin-bottom: 0
+  padding: $baseline
+  position: relative
+
+  @media (min-width: $breakpoints.tablet)
+    padding: ($baseline * 2)
+
+  @media (min-width: $breakpoints.desktop)
+    padding: ($baseline * 3)
+
+  &--show-contact
+    margin-bottom: 100vh
+
+  &__content
+    align-items: flex-end
+    display: flex
+    flex-wrap: wrap
+    justify-content: space-between
+
+  &__title
+    @extend h1
+    flex: 0 0 100%
+    margin: 0 0 1.5rem
+
+    @media (min-width: $breakpoints.tablet)
+      flex: 1 1
+      margin: 0
+
+  &__contact-form-toggle
+    flex: 0 0 auto
+
+  &__nav
+    align-items: center
+    display: flex
+    justify-content: flex-start
+    margin: ($baseline * 4) 0 0
+
+  &__home
+    color: $colors.white
+    display: block
+    flex: 0 0 auto
+    margin: 0 $baseline $baseline 0
+
+    svg
+      width: ($baseline * 1.5)
+
+      .logo__frame
+        fill: $colors.red
+
+  &__links
+    align-items: center
+    display: flex
+    list-style: none
+
+  &__link
+    color: $colors.gray2
+    font-size: .75em
+    margin: 0 ($baseline / 2) 0 0
+    text-decoration none
+
+  &__end
+    height: 0
+    left: 0
+    position: absolute
+    top: 100%
+    width: 100%

@@ -1,0 +1,53 @@
+.blog-index
+  list-style: none
+  margin: 0 auto
+  max-width: 50em
+  padding: $baseline
+
+  @media (min-width: $breakpoints.tablet)
+    padding: ($baseline * 2)
+
+  @media (min-width: $breakpoints.desktop)
+    padding:($baseline * 3)
+
+  &__item
+    align-items: flex-start
+    display: flex
+    flex-wrap: wrap
+    margin-bottom: ($baseline * 2)
+
+    @media (min-width: $breakpoints.desktop)
+      margin-bottom: ($baseline * 3)
+
+    &-link
+      color: $colors.red
+      text-decoration: none
+
+    &-meta
+      @extend h5
+      color: $colors.gray2
+      display: flex
+      flex: 0 0 100%
+      font-size .75em
+
+      > :not(:last-child)
+        &::after
+          content: '•'
+          margin: 0 1ch
+
+    &-image-wrapper
+      flex: 0 0 ($baseline * 4)
+      margin-right: $baseline
+
+      .gatsby-image-wrapper
+        height: 6em !important
+        width: 6em !important
+
+        img
+          height: 100%
+          object-fit: contain !important
+          object-position: top center
+          width: 100%
+
+    &-content
+      flex: 1 1

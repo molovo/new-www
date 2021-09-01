@@ -1,0 +1,74 @@
+@keyframes navToggleTop
+  0%
+    transform: translate(-50%, -50%) rotate(-45deg)
+
+  50%
+    transform: translate(-50%, -50%)
+
+  100%
+    transform: translate(-50%, ($baseline / -6))
+
+@keyframes navToggleTopExpand
+  0%
+    transform: translate(-50%, ($baseline / -6))
+
+  50%
+    transform: translate(-50%, -50%)
+
+  100%
+    transform: translate(-50%, -50%) rotate(-45deg)
+
+@keyframes navToggleBottom
+  0%
+    transform: translate(-50%, -50%) rotate(45deg)
+
+  50%
+    transform: translate(-50%, -50%)
+
+  100%
+    transform: translate(-50%, ($baseline / 6))
+
+@keyframes navToggleBottomExpand
+  0%
+    transform: translate(-50%, ($baseline / 6))
+
+  50%
+    transform: translate(-50%, -50%)
+
+  100%
+    transform: translate(-50%, -50%) rotate(45deg)
+
+.nav-toggle
+  appearance: none
+  border: 0
+  background: none
+  color: inherit
+  cursor: pointer
+  height: $baseline
+  position: relative
+  width: $baseline
+
+  &::before,
+  &::after
+    background: currentColor
+    content: ''
+    display: inline-block
+    height: 2px
+    left: 50%
+    position: absolute
+    top: 50%
+    transition: transform .5s ease
+    width: $baseline
+
+  &::before
+    animation: navToggleTop .5s ease-in-out forwards running
+
+  &::after
+    animation: navToggleBottom .5s ease-in-out forwards running
+
+  &[aria-expanded="true"]
+    &::before
+      animation-name: navToggleTopExpand
+
+    &::after
+      animation-name: navToggleBottomExpand

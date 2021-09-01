@@ -1,0 +1,30 @@
+.article--the-view-from-above
+  .main
+    background: $colors.black
+    color: $colors.white
+    padding-top: 30vw
+
+    > div > div
+      transform: none !important
+
+  .blog-post
+    position: static
+
+    &__header-image
+      &::after
+        background: linear-gradient(to bottom, transparent 0%, $colors.black 100%)
+        bottom: 0
+        content: ''
+        display: block
+        height: ($baseline * 6)
+        left: 0
+        position: absolute
+        width: 100%
+
+    &__title
+      font-family: $fonts.tertiary
+      font-size: 14em
+      font-weight: $fontWeights.normal
+      letter-spacing: normal
+      line-height: .625em
+      margin: 0

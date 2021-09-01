@@ -1,0 +1,21 @@
+.page-header
+  align-items: stretch
+  display: flex
+  flex-wrap: wrap
+
+  &__cta
+    flex: 0 0 100%
+
+    @media (min-width: $breakpoints.desktop)
+      flex: 0 0 50%
+
+  &__content
+    flex: 0 0 100%
+    padding: $baseline
+
+    @media (min-width: $breakpoints.tablet)
+      padding: ($baseline * 2)
+
+    @media (min-width: $breakpoints.desktop)
+      flex: 0 0 50%
+      padding: 25vh ($baseline * 3) ($baseline * 3)

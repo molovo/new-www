@@ -1,0 +1,73 @@
+.header
+  align-items center
+  color: $colors.red
+  display flex
+  justify-content flex-end
+  left: 0
+  padding: $baseline $baseline $baseline ($baseline * 2)
+  position: fixed
+  top: 0
+  transition: color .5s ease-in-out
+  z-index 9
+  width: 100%
+
+  @media (min-width: $breakpoints.tablet)
+    padding: ($baseline * 2) ($baseline * 2) ($baseline * 2) ($baseline * 3)
+
+  @media (min-width: $breakpoints.desktop)
+    padding: ($baseline * 3) ($baseline * 3) $baseline ($baseline * 4)
+
+  &__home
+    color: inherit
+    font-size: 1.125em
+    margin-right: ($baseline / 2)
+    text-decoration: none
+
+    .logo
+      display: block
+      margin: .5em 0
+      width: $baseline * 1.5
+
+  &__nav-toggle
+    margin-left: auto
+
+  &--white
+    color: $colors.white
+
+    .breadcrumb
+      color: $colors.white
+
+  &--white-red
+    .header__home,
+    .breadcrumb
+      color: $colors.white
+
+  &--black-red
+    .header__home,
+    .breadcrumb
+      color: $colors.black
+
+  &--red-white
+    .nav-toggle
+      color: $colors.white
+
+  &--black-white
+    .header__home,
+    .breadcrumb
+      color: $colors.black
+
+    .nav-toggle
+      color: $colors.white
+
+  &__contact-form-close
+    align-items: center
+    background: transparent
+    border: 2px solid $colors.white
+    border-radius: 50%
+    color: $colors.white
+    display: inline-flex
+    font: inherit
+    height: ($baseline * 1.25)
+    justify-content: center
+    margin-left: auto
+    width: ($baseline * 1.25)

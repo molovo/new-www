@@ -1,0 +1,55 @@
+input,
+textarea,
+select
+  padding: ($baseline / 4) 0
+  width: 100%
+
+textarea
+  height: 18em
+  max-height: 35vh
+
+.form
+  &__group
+    margin: 0 0 $baseline
+    width: 100%
+
+  &__label
+    font-size: .875em
+    font-weight: $fontWeights.bold
+    margin: 0
+
+  &__input
+    appearance: none
+    background: transparent
+    border: solid currentColor
+    border-width: 0 0 2px
+    color: inherit
+    font: inherit
+
+    &:focus
+      outline: 0
+
+    &::placeholder
+      color: inherit
+      opacity: .5
+
+  &__row
+    align-items: flex-end
+    display: flex
+    flex-wrap: wrap
+    margin: 0 0 $baseline
+
+    @media (min-width: $breakpoints.tablet)
+      flex-wrap: nowrap
+
+    .form__group
+      flex: 1 1
+
+      @media (min-width: $breakpoints.tablet)
+        margin: 0 ($baseline * 2) 0 0
+
+    .button
+      flex: 0 0 100%
+
+      @media (min-width: $breakpoints.tablet)
+        flex: 0 0 auto

@@ -1,0 +1,289 @@
+$duration = .5s
+
+.nav
+  background: $colors.red2
+  border-left: $baseline solid $colors.red
+  color: $colors.white
+  height: 100vh
+  left: 0
+  overflow-x: hidden
+  overflow-y: auto
+  padding: ($baseline * 4) 0 $baseline
+  position fixed
+  top: 0
+  transition: opacity $duration ease-in, transform $duration ease-in
+  width: 100vw
+  z-index 8
+
+  @media (min-width: $breakpoints.tablet)
+    padding: ($baseline * 6) 0 ($baseline * 2)
+
+  @media (min-width: $breakpoints.desktop)
+    padding: ($baseline * 6) 0 ($baseline * 3)
+
+  &__container
+    align-items stretch
+    display flex
+    flex-wrap: wrap
+    height: 100%
+    justify-content flex-start
+
+    @media (min-width: $breakpoints.tablet)
+      flex-wrap: nowrap
+
+  &__list,
+  &__studies-list
+    align-items center
+    display flex
+    justify-content flex-start
+    list-style: none
+    margin: 0
+
+  &__list
+    align-items flex-start
+    flex: 0 0 100%
+    flex-direction: column
+    flex-wrap: nowrap
+    justify-content center
+    padding: 0 $baseline
+    pointer-events: none
+    transition: margin .5s ease
+
+    &:hover
+      .nav__link
+        color: $colors.red3
+
+        &:hover
+          color: $colors.white
+
+    @media (min-width: $breakpoints.tablet)
+      flex: 0 0 70%
+      padding: 0 ($baseline * 2)
+
+      &[aria-hidden="true"]
+        margin-left: -70%
+
+        & + .nav__studies
+          .ScrollbarsCustom
+            &-Scroller
+              overflow-x: scroll !important
+
+            &-Track
+              display block !important
+
+          .nav__studies-list
+            .nav__study
+              opacity: 1
+
+    @media (min-width: $breakpoints.desktop)
+      padding: 0 ($baseline * 3)
+
+  &__item
+    display: block
+    flex: 0 0 auto
+    margin-right: ($baseline * 2)
+    transition: opacity $duration $duration ease-in, transform $duration $duration ease-out
+
+    for num in (0..10)
+      &:nth-child({num})
+        transition-delay: $duration + (num * .15s)
+
+    &:hover
+      transition: opacity .5s ease-out
+
+  &__link
+    @extends h1
+    color: $colors.white
+    // font-family: $fonts.primary
+    font-size: 10.5vw
+    margin-bottom: 0
+    pointer-events: all
+    text-decoration none
+    transition: color .5s ease, opacity .5s ease
+
+    @media (min-width: $breakpoints.tablet)
+      font-size: 6.5vw
+
+  &__studies
+    pointer-events: none
+    position: relative
+    width: 100%
+
+    .ScrollbarsCustom
+      height: calc(90vw + 3em) !important
+      pointer-events: all
+
+      @media (min-width: $breakpoints.tablet)
+        height: 100% !important
+
+      &-Wrapper,
+      &-Scroller,
+      &-Content
+        height: 100%
+
+      &-Scroller
+        hideScrollbars()
+        -webkit-overflow-scrolling: touch
+        overflow-x: hidden !important
+
+      &-Track
+        background: $colors.red !important
+        border-radius: 0 !important
+        display: none !important
+
+      &-TrackX
+        bottom: ($baseline / -1.5) !important
+        left: 70% !important
+        right: $baseline !important
+        width: auto !important
+
+        @media (min-width: $breakpoints.tablet)
+          left: 70% !important
+          right: ($baseline * 2) !important
+
+        @media (min-width: $breakpoints.desktop)
+          left: 70% !important
+          right: ($baseline * 3) !important
+
+      &-Thumb
+        background: $colors.white !important
+        border-radius: 0 !important
+
+  &__studies-list
+    height: 100%
+    padding: $baseline
+    perspective: 1000px
+    perspective-origin: 0% 50%
+
+    @media (min-width: $breakpoints.tablet)
+      padding: $baseline ($baseline * 2)
+
+    @media (min-width: $breakpoints.desktop)
+      padding: $baseline ($baseline * 3)
+
+    &:hover
+      .nav__study-link
+        opacity: .3
+
+        &:hover
+          opacity: 1
+
+  &__studies-link
+    appearance: none
+    background: none
+    border: 0
+    color: inherit
+    cursor: pointer
+    font: inherit
+    left: $baseline
+    pointer-events: all
+    position: absolute
+    top: 100%
+
+    @media (min-width: $breakpoints.tablet)
+      left: ($baseline * 2)
+
+    @media (min-width: $breakpoints.desktop)
+      left: ($baseline * 3)
+
+  &__study
+    aspect-ratio: 2 / 3
+    color: $colors.white
+    flex: 0 0 auto
+    height: auto
+    opacity 0
+    margin-right: ($baseline * 2)
+    transition: opacity ($duration * 1.5) ($duration + .1s) ease-in, transform ($duration * 1.5) ($duration + .1s) ease-out
+    width: 60vw
+
+    @media (min-width: $breakpoints.tablet)
+      height: 100%
+      width: auto
+
+    for num in (0..9)
+      &:nth-child({num})
+        transition-delay: (num * .15s)
+
+    &:first-child
+      opacity: 1
+      transition-delay: $duration
+
+    &:last-child
+      box-sizing: content-box
+      padding-right: $baseline
+
+      @media (min-width: $breakpoints.tablet)
+        padding-right: ($baseline * 2)
+
+      @media (min-width: $breakpoints.desktop)
+        padding-right: ($baseline * 3)
+
+    &--superrb
+      color: $colors.black
+
+    &--redistribute
+      color: $colors.black
+
+    &-link
+      align-items: flex-start
+      color: inherit
+      display: flex
+      flex-direction: column
+      height: 100%
+      justify-content: flex-start
+      overflow: hidden
+      padding: $baseline
+      pointer-events: all
+      position: relative
+      text-decoration: none
+      transition: box-shadow .5s ease, opacity .5s ease, transform .5s ease
+
+      &:hover
+        box-shadow: 0 0 10px 0 rgba(0, 0, 0, .1)
+        transform: scale(1.025)
+
+      &::after
+        cover()
+        background: linear-gradient(to bottom right, rgba($colors.black, .3) 0%, rgba($colors.black, .05) 50%, rgba($colors.black, 0) 100%)
+        content: ''
+        display: inline-block
+        z-index: -1
+
+    &-client
+      @extends h5
+      margin: auto 0 $baseline
+
+    &-title
+      @extends h3
+      font-family: $fonts.tertiary
+      font-size: 4.5em
+      font-weight: $fontWeights.normal
+      letter-spacing: normal
+      line-height: ($baseline / 2)
+      margin: 0
+
+    &-image
+      cover()
+      z-index: -1
+
+      picture,
+      img,
+      > div
+        height: 100% !important
+        object-fit: cover
+        object-position: center
+        width: 100% !important
+
+  &[aria-hidden="true"]:not(:focus-within)
+    pointer-events: none
+    transition: opacity $duration ease-in, transform $duration ease-in
+    transform: translateY(-150%) skewY(-15deg)
+
+    .nav
+      &__item
+        opacity: 0
+        transform: translateX(($baseline * -1))
+
+      &__study
+        opacity: 0
+        transform: translateX(100%)

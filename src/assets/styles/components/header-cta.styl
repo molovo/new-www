@@ -1,0 +1,55 @@
+.header-cta
+  color: $colors.white
+  height: 100vh
+  position: relative
+
+  @media (min-width: $breakpoints.desktop)
+    position: sticky
+    top: 0
+
+  &__image
+    cover()
+    z-index: 1
+
+    > div
+      height: 100% !important
+      object-fit: cover
+      object-position: center
+      width: 100% !important
+
+  &__content
+    align-items flex-start
+    display: flex
+    flex-direction: column
+    height: 100%
+    justify-content: flex-start
+    padding: 25vh $baseline $baseline
+    position: relative
+    z-index: 2
+
+    @media (min-width: $breakpoints.tablet)
+      padding: 25vh ($baseline * 2) ($baseline * 2)
+
+    @media (min-width: $breakpoints.desktop)
+      padding: 25vh ($baseline * 3) ($baseline * 3)
+
+  &__client
+    @extend h5
+
+  &__logos
+    margin: 0 0 $baseline
+
+  &__title
+    font-family: $fonts.tertiary
+    font-weight: $fontWeights.normal
+    font-size: 3em
+    line-height: .75em
+    letter-spacing: normal
+    margin: 0 0 ($baseline / 2 / 7.5)
+    max-width: 4em
+
+    @media (min-width: $breakpoints.tablet)
+      font-size: 6em
+
+  &__button
+    flex: 0 0 auto

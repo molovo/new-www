@@ -1,0 +1,203 @@
+.page--work
+  .main
+    padding: 0
+
+  .page-header
+    &__cta
+      flex: 1 1
+
+    &__content
+      background: $colors.black
+      color: $colors.white
+      display: flex
+      flex-direction: column
+      justify-content: flex-end
+      transition: flex-basis .5s .5s ease
+
+      > *
+        opacity: 0
+        transition: opacity .5s .75s ease
+
+    &.animated
+      .page-header__content
+        flex: 0 0 28em
+
+        > *
+          opacity: 1
+
+  .header-cta
+    &__content
+      justify-content: flex-end
+
+    &__title
+      font-size: 12vw
+
+.case-study
+  &__title
+    color: $colors.gray2
+
+  &__meta
+    align-items: baseline
+    display: flex
+    flex-wrap: wrap
+
+    dt
+      color: $colors.gray2
+      flex: 0 0 25%
+      font-size: .75em
+      font-weight 700
+      letter-spacing: .05em
+      text-transform: uppercase
+
+    dd
+      flex: 0 0 75%
+      margin: 0 0 ($baseline / 2)
+
+  &__section
+    padding: $baseline
+    position: relative
+
+    @media (min-width: $breakpoints.tablet)
+      padding: ($baseline * 2)
+
+    @media (min-width: $breakpoints.desktop)
+      padding: ($baseline * 3)
+
+    &-background
+      cover()
+      z-index: 0
+
+    &-title
+      font-family: $fonts.primary
+      font-size: 12vw
+      line-height: .875em
+      position: relative
+      text-align: center
+      z-index: 1
+
+    &-content
+      position: relative
+      z-index: 1
+
+@keyframes animateNextCaseStudyClient
+  0%
+    transform: translateX(0)
+
+  100%
+    transform: translateX(-100%)
+
+.next-case-study
+  background: $colors.red2
+  color: $colors.white
+  display: block
+  overflow: hidden
+  padding: $baseline
+  position: relative
+  text-decoration: none
+  transition: background-color .5s ease
+
+  @media (min-width: $breakpoints.tablet)
+    padding: ($baseline * 2)
+
+  @media (min-width: $breakpoints.desktop)
+    padding: ($baseline * 3)
+
+  &:hover
+    background-color: $colors.black
+
+  &__content
+    align-items: center
+    display: flex
+    flex-direction: column
+    justify-content: center
+    position: relative
+    text-align: center
+    z-index: 1
+
+  &__label
+    @extend h5
+    color: rgba($colors.white, .5)
+
+  &__title
+    @extend h1
+    font-family: $fonts.tertiary
+    font-weight: $fontWeights.normal
+    font-size: 4.5em
+    letter-spacing: normal
+    max-width: 5.5em
+
+  .study-logos
+    color: inherit
+    font-size: 1.25em
+    margin: 0 0 $baseline
+
+  &__client
+    @extend h1
+    color: $colors.red2
+    display: flex
+    flex-wrap: nowrap
+    font-family: $fonts.primary
+    font-size: 50vw
+    font-weight: $fontWeights.bold
+    left: 50%
+    margin: 0
+    position: absolute
+    top: 50%
+    transform: translate(-50%, -50%)
+    z-index: 0
+
+    &-name
+      animation: animateNextCaseStudyClient 30s linear infinite
+      flex: 0 0 auto
+      padding: 0 7.5vw
+
+.case-study__out-link
+  align-items: center
+  background: $colors.red2
+  border-radius: ($baseline * 1.25)
+  color: $colors.white
+  display: inline-flex
+  font-size: .75em
+  font-weight: $fontWeights.bold
+  justify-content: center
+  letter-spacing: .05em
+  overflow: hidden
+  padding: ($baseline / 2) ($baseline / 1.25)
+  text-decoration: none
+  text-transform uppercase
+  transform: translateY(($baseline * -2.25))
+  transition: background-color .5s ease
+  white-space: nowrap
+  width: auto
+
+  &-wrapper
+    align-items: center
+    bottom: 0
+    display: flex
+    height: 0
+    justify-content: flex-end
+    padding: 0 $baseline
+    position: sticky
+    width: 100%
+
+  &-label
+    display: block
+    max-width: 0
+    overflow: hidden
+    transition: max-width .75s ease, padding .5s ease
+    width: auto
+    // margin-right: -200%
+
+  &:hover
+    background: $colors.red
+
+    .case-study__out-link-label
+      padding-right: ($baseline / 2)
+      max-width: 100vw
+
+  svg
+    height: ($baseline / 1.5)
+    width: ($baseline / 1.5)
+
+    path
+      fill: currentColor

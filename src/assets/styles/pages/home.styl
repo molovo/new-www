@@ -1,0 +1,27 @@
+.page--home
+  .main
+    padding: 0
+
+.home
+  &__links
+    grid(2, ($baseline / 2))
+    margin: 0 0 $baseline
+
+    .button
+      align-self: flex-end
+      flex: 0 0 auto
+      margin: 0 auto ($baseline * 1.25) ($baseline / 2)
+
+  &__link
+    min-width: 16em
+
+.item-link
+  margin: 0 0 $baseline
+
+  &__title
+    color: $colors.red
+    font-weight: 600
+    margin: 0
+
+  &__text
+    margin: ($baseline / 4) 0

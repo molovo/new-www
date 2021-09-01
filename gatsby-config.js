@@ -1,22 +1,43 @@
+const autoprefixer = require('autoprefixer')
+
 module.exports = {
+  flags: {
+    PRESERVE_FILE_DOWNLOAD_CACHE: true,
+    PRESERVE_WEBPACK_CACHE: true,
+    DEV_SSR: true,
+    FAST_DEV: true,
+  },
   siteMetadata: {
-    title: `Gatsby Starter Blog`,
+    title: `molovo`,
     author: {
-      name: `Kyle Mathews`,
+      name: `James Dinsdale`,
       summary: `who lives and works in San Francisco building useful things.`,
     },
-    description: `A starter blog demonstrating what Gatsby can do.`,
-    siteUrl: `https://gatsbystarterblogsource.gatsbyjs.io/`,
+    description: `Hi, I'm James. I make websites`,
+    siteUrl: `https://molovo.co/`,
     social: {
-      twitter: `kylemathews`,
+      twitter: `molovo`,
+      github: `molovo`,
     },
   },
   plugins: [
-    `gatsby-plugin-image`,
+    {
+      resolve: `gatsby-plugin-stylus`,
+      options: {
+        postCssPlugins: [autoprefixer()],
+      },
+    },
     {
       resolve: `gatsby-source-filesystem`,
       options: {
         path: `${__dirname}/content/blog`,
+        name: `blog`,
+      },
+    },
+    {
+      resolve: `gatsby-source-filesystem`,
+      options: {
+        path: `${__dirname}/content/studies`,
         name: `blog`,
       },
     },
@@ -28,35 +49,37 @@ module.exports = {
       },
     },
     {
-      resolve: `gatsby-transformer-remark`,
+      resolve: `gatsby-plugin-mdx`,
       options: {
-        plugins: [
+        gatsbyRemarkPlugins: [
+          { resolve: `gatsby-remark-highlight-code` },
           {
-            resolve: `gatsby-remark-images`,
+            resolve: `gatsby-remark-smartypants`,
             options: {
-              maxWidth: 630,
+              dashes: `oldschool`,
             },
           },
-          {
-            resolve: `gatsby-remark-responsive-iframe`,
-            options: {
-              wrapperStyle: `margin-bottom: 1.0725rem`,
-            },
-          },
-          `gatsby-remark-prismjs`,
-          `gatsby-remark-copy-linked-files`,
-          `gatsby-remark-smartypants`,
+        ],
+        remarkPlugins: [{ resolve: `remark-typegraf` }],
+        rehypePlugins: [
+          { resolve: `rehype-external-links` },
+          { resolve: `rehype-slug` },
+          { resolve: `rehype-autolink-headings` },
         ],
       },
     },
+    `gatsby-plugin-image`,
     `gatsby-transformer-sharp`,
-    `gatsby-plugin-sharp`,
-    // {
-    //   resolve: `gatsby-plugin-google-analytics`,
-    //   options: {
-    //     trackingId: `ADD YOUR TRACKING ID HERE`,
-    //   },
-    // },
+    {
+      resolve: `gatsby-plugin-sharp`,
+      options: {
+        defaults: {
+          formats: [`webp`],
+          quality: 50,
+          breakpoints: new Array(7).fill(0).map((_, i) => (i + 1) * 400),
+        },
+      },
+    },
     {
       resolve: `gatsby-plugin-feed`,
       options: {
@@ -74,20 +97,18 @@ module.exports = {
         `,
         feeds: [
           {
-            serialize: ({ query: { site, allMarkdownRemark } }) => {
-              return allMarkdownRemark.nodes.map(node => {
-                return Object.assign({}, node.frontmatter, {
-                  description: node.excerpt,
-                  date: node.frontmatter.date,
-                  url: site.siteMetadata.siteUrl + node.fields.slug,
-                  guid: site.siteMetadata.siteUrl + node.fields.slug,
-                  custom_elements: [{ "content:encoded": node.html }],
-                })
-              })
-            },
+            serialize: ({ query: { site, allMdx } }) =>
+              allMdx.nodes.map(node => ({
+                ...node.frontmatter,
+                description: node.excerpt,
+                date: node.frontmatter.date,
+                url: site.siteMetadata.siteUrl + node.fields.slug,
+                guid: site.siteMetadata.siteUrl + node.fields.slug,
+                custom_elements: [{ 'content:encoded': node.html }],
+              })),
             query: `
               {
-                allMarkdownRemark(
+                allMdx(
                   sort: { order: DESC, fields: [frontmatter___date] },
                 ) {
                   nodes {
@@ -104,7 +125,7 @@ module.exports = {
                 }
               }
             `,
-            output: "/rss.xml",
+            output: '/rss.xml',
           },
         ],
       },
@@ -112,8 +133,8 @@ module.exports = {
     {
       resolve: `gatsby-plugin-manifest`,
       options: {
-        name: `Gatsby Starter Blog`,
-        short_name: `GatsbyJS`,
+        name: `Molovo`,
+        short_name: `Molovo`,
         start_url: `/`,
         background_color: `#ffffff`,
         theme_color: `#663399`,
@@ -125,6 +146,24 @@ module.exports = {
     `gatsby-plugin-gatsby-cloud`,
     // this (optional) plugin enables Progressive Web App + Offline functionality
     // To learn more, visit: https://gatsby.dev/offline
-    // `gatsby-plugin-offline`,
+    `gatsby-plugin-offline`,
+    {
+      resolve: `gatsby-plugin-breadcrumb`,
+      options: {
+        // useAutoGen: required 'true' to use autogen
+        useAutoGen: true,
+        // exclude: optional, include this array to exclude paths you don't want to
+        // generate breadcrumbs for (see below for details).
+        exclude: [
+          `**/dev-404-page/**`,
+          `**/404/**`,
+          `**/404.html`,
+          `**/offline-plugin-app-shell-fallback/**`,
+        ],
+        // trailingSlashes: optional, will add trailing slashes to the end
+        // of crumb pathnames. default is false
+        trailingSlashes: false,
+      },
+    },
   ],
 }

@@ -1,0 +1,20 @@
+.article--writing
+  .blog-post
+    &__header-image
+      position: relative
+
+      &::after
+        color: $colors.red
+        content: 'Writing'
+        font-size: 15vw
+        font-weight: $fontWeights.bold
+        left: 50%
+        position: absolute
+        text-transform: uppercase
+        top: 90%
+        transform: translate(-50%, -50%)
+        z-index: -1
+
+    &__title
+      opacity: 0
+      pointer-events: none

@@ -1,0 +1,83 @@
+.blog-post,
+.case-study__section-content
+  margin: 0 auto
+  max-width: 50em
+  position: relative
+  z-index: 1
+
+  @media (min-width: $breakpoints.tablet)
+    padding: 0 ($baseline * 2) ($baseline * 2)
+
+  @media (min-width: $breakpoints.desktop)
+    padding: 0 ($baseline * 3) ($baseline * 3)
+
+  &__header-image
+    padding: 0 $baseline $baseline
+
+    @media (min-width: $breakpoints.tablet)
+      padding: 0 ($baseline * 2) ($baseline * 2)
+
+    @media (min-width: $breakpoints.desktop)
+      padding: 0 ($baseline * 4) ($baseline * 4)
+
+    &--full-size
+      border-left: $baseline solid $colors.red
+      height: 100vh
+      left: 0
+      overflow: hidden
+      padding: 0
+      position: absolute
+      top: 0
+      width: 100vw
+      z-index: 0
+
+  &__header,
+  &__content
+    position: relative
+    z-index: 2
+
+.blog-post__content,
+.case-study__section-content
+  > .image
+    margin: ($baseline * 2) 0 ($baseline * 2) -10.5em
+    margin-left: -10.5em
+    position: relative
+    width: calc(100% + 10.5em)
+
+    .image__caption
+      font-size: .75em
+      left: 100%
+      opacity .7
+      margin-left: $baseline
+      position: absolute
+      top: 0
+      width: 15em
+
+    &--full-width
+      left: 50%
+      margin-left: 0
+      position: relative
+      transform: translateX(-50%)
+      width: calc(100vw - 1.5em)
+
+      .image__caption
+        font-size: .75em
+        left: $baseline
+        opacity .7
+        position: absolute
+        top: calc(100% + 1.5em)
+        width: 15em
+
+        @media (min-width: $breakpoints.tablet)
+          left: ($baseline * 2)
+
+        @media (min-width: $breakpoints.desktop)
+          left: ($baseline * 3)
+
+      > div,
+      > div > div
+        max-width: 100%
+
+  deckgo-highlight-code
+    margin: 0 0 $baseline
+    box-shadow: 0 0 10px 0 rgba($colors.black, .4)

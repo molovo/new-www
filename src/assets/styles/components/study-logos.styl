@@ -1,0 +1,29 @@
+.study-logos
+  align-items: center
+  color: inherit
+  display: flex
+  justify-content: flex-start
+
+  .logo
+    width: ($baseline * 1.5)
+
+  &__plus
+    font-family: $fonts.tertiary
+    font-size: 2.25em
+    height: .825em
+    line-height: 1em
+    margin: 0 .5ch
+
+  svg:last-child
+    height: ($baseline * .75)
+    width: auto
+
+    path
+      fill: currentColor
+
+  &--anglepoise
+    .study-logos__plus
+      margin-right: .25ch
+
+    svg:last-child
+      height: 1.5em

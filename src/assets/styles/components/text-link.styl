@@ -1,0 +1,33 @@
+.text-link
+  @extend h5
+  color: inherit
+  cursor: pointer
+  display: inline-block
+  font-size .75em
+  line-height: ($baseline * 1.5)
+  margin: 0
+  overflow: hidden
+  position: relative
+  text-decoration: none
+
+  &::after
+    background: $colors.red
+    bottom: 0
+    content: ''
+    display: block
+    height: 2px
+    left: 0
+    position: absolute
+    transform: translateX(-100%)
+    transition: transform .5s ease
+    width: 100%
+
+  &:hover
+    &::after
+      transform: translateX(0)
+
+p
+  > a
+    @extend .text-link
+    line-height: $baseline
+    margin-bottom: -.4em
