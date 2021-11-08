@@ -1,0 +1,19 @@
+.image
+  &--group
+    align-items: stretch
+    display: grid
+    grid-template-columns: 1fr 1fr
+    gap: $baseline
+    justify-content: center
+
+    @media (min-width: $breakpoints.tablet)
+      gap: ($baseline * 2)
+
+    .image__image
+      flex: 1 1
+      width: auto
+      max-width: none
+
+  &__wrapper
+    align-self: flex-start
+    height: auto

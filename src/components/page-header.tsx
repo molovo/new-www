@@ -12,9 +12,15 @@ import HeaderCta from './header-cta'
 interface Props {
   study: Study
   children: Array<ReactElement>
-  headerModifier: string
-  headerModifierMobile: string
-  includeStudyLink: boolean
+  headerModifier?: string
+  headerModifierMobile?: string
+  includeStudyLink?: boolean
+  title?: string | null
+}
+
+export interface PageHeaderRef {
+  readonly section?: HTMLElement | null
+  readonly cta?: HTMLElement | null
 }
 
 const PageHeader = forwardRef(
@@ -25,11 +31,12 @@ const PageHeader = forwardRef(
       headerModifier = 'white-red',
       headerModifierMobile = 'white',
       includeStudyLink = false,
+      title = null,
     }: PropsWithChildren<Props>,
-    ref: Ref<ReactElement>
+    ref: Ref<PageHeaderRef>
   ) => {
-    const section: Ref<ReactElement> = useRef(null)
-    const cta: Ref<ReactElement> = useRef(null)
+    const section = useRef<HTMLElement | null>(null)
+    const cta = useRef<HTMLElement | null>(null)
 
     useImperativeHandle(ref, () => ({
       get section() {
@@ -37,7 +44,7 @@ const PageHeader = forwardRef(
       },
 
       get cta() {
-        cta.current
+        return cta.current
       },
     }))
 
@@ -52,6 +59,7 @@ const PageHeader = forwardRef(
           ref={cta}
           className="page-header__cta"
           includeLink={includeStudyLink}
+          title={title}
           study={study}
         />
 

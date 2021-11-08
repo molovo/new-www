@@ -1,23 +1,23 @@
-import React, { Component, forwardRef, Ref } from 'react'
+import React, { forwardRef, Ref } from 'react'
+import { animator } from '../helpers/animator'
 import Study from '../types/study'
 import Button from './button'
 import Image from './image'
-import { path } from './images/icons/anglepoise'
 
 interface Props {
   study: Study
   includeLink: boolean
   className: string
+  title: string | null
 }
 
-const HeaderCta: React.FC<Props> = forwardRef(
+const HeaderCta = forwardRef(
   (
-    { study, includeLink = false, className = '' }: Props,
-    ref: Ref<Component>
+    { study, title, includeLink = false, className = '' }: Props,
+    ref: Ref<HTMLElement>
   ) => {
     const {
       frontmatter: {
-        title,
         client,
         thumbnail,
         image,
@@ -38,8 +38,10 @@ const HeaderCta: React.FC<Props> = forwardRef(
       >
         <Image
           className="header-cta__image"
+          ref={animator}
           image={includeLink ? thumbnail : image}
           alt={client}
+          sizes="(min-width: 63.75em) 50vw, 100vw"
         />
 
         <div className="header-cta__content">
@@ -52,7 +54,7 @@ const HeaderCta: React.FC<Props> = forwardRef(
                 maxWidth: ctaMaxWidth,
               }}
             >
-              <span>{title}</span>
+              <span>{title || study.frontmatter.title}</span>
             </h1>
 
             {includeLink && (

@@ -1,13 +1,27 @@
+import { StandardProperties } from 'csstype'
+
+type CSSProperty = keyof StandardProperties<string>
+type CSSValue = string | number
+
 // -- Cross browser method to get style properties:
-function getStyle(element: Element, property: string): string | undefined {
-  if (window.getComputedStyle) {
-    return document.defaultView.getComputedStyle(element, null)[property]
+function getStyle(
+  element: Element,
+  property: CSSProperty
+): CSSValue | undefined {
+  if (document?.defaultView && 'getComputedStyle' in document.defaultView) {
+    const computedStyle = document.defaultView.getComputedStyle(
+      element,
+      null
+    ) as StandardProperties<string>
+    if (computedStyle) {
+      return computedStyle[property] as CSSValue
+    }
   }
 
   return undefined
 }
 
-function elementInDocument(element: Element): boolean {
+function elementInDocument(element: HTMLElement | null): boolean {
   let el = element
   while (el) {
     if (el === document.documentElement) {
@@ -84,8 +98,8 @@ const isVisible = (
 
     // -- Add the offset parent's left/top coords to our element's offset:
     if (element.offsetParent === p) {
-      l += p.offsetLeft
-      t += p.offsetTop
+      l += p.offsetLeft // eslint-disable-line no-param-reassign
+      t += p.offsetTop // eslint-disable-line no-param-reassign
     }
 
     // -- Let's recursively check upwards:

@@ -1,6 +1,6 @@
 import React from 'react'
 import Study from '../../types/study'
-import ExternalLink from '../images/icons/external-link'
+import ArrowUpRight from '../images/icons/arrow-up-right'
 
 interface Props {
   study: Study
@@ -24,7 +24,7 @@ const CaseStudyOutLink: React.FC<Props> = ({
         className="case-study__out-link"
       >
         <span className="case-study__out-link-label">Visit {client}</span>
-        <ExternalLink />
+        <ArrowUpRight />
       </a>
     </div>
   )

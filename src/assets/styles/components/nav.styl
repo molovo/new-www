@@ -68,7 +68,7 @@ $duration = .5s
             &-Scroller
               overflow-x: scroll !important
 
-            &-Track
+            &-TrackX
               display block !important
 
           .nav__studies-list
@@ -104,8 +104,10 @@ $duration = .5s
     @media (min-width: $breakpoints.tablet)
       font-size: 6.5vw
 
+    > *
+      pointer-events: none
+
   &__studies
-    pointer-events: none
     position: relative
     width: 100%
 
@@ -131,6 +133,9 @@ $duration = .5s
         border-radius: 0 !important
         display: none !important
 
+      &-TrackY
+        display: none !important
+
       &-TrackX
         bottom: ($baseline / -1.5) !important
         left: 70% !important
@@ -149,11 +154,15 @@ $duration = .5s
         background: $colors.white !important
         border-radius: 0 !important
 
+  &__studies-wrapper
+    height: 100%
+
   &__studies-list
     height: 100%
     padding: $baseline
-    perspective: 1000px
-    perspective-origin: 0% 50%
+    // perspective: 1000px
+    // perspective-origin: 0% 50%
+    // pointer-events: none
 
     @media (min-width: $breakpoints.tablet)
       padding: $baseline ($baseline * 2)
@@ -161,12 +170,12 @@ $duration = .5s
     @media (min-width: $breakpoints.desktop)
       padding: $baseline ($baseline * 3)
 
-    &:hover
-      .nav__study-link
-        opacity: .3
+    // &:hover
+    //   .nav__study-link
+    //     opacity: .3
 
-        &:hover
-          opacity: 1
+    //     &:hover
+    //       opacity: 1
 
   &__studies-link
     appearance: none
@@ -191,8 +200,8 @@ $duration = .5s
     color: $colors.white
     flex: 0 0 auto
     height: auto
-    opacity 0
     margin-right: ($baseline * 2)
+    opacity 0
     transition: opacity ($duration * 1.5) ($duration + .1s) ease-in, transform ($duration * 1.5) ($duration + .1s) ease-out
     width: 60vw
 
@@ -238,16 +247,13 @@ $duration = .5s
       text-decoration: none
       transition: box-shadow .5s ease, opacity .5s ease, transform .5s ease
 
+      &--contact
+        background: $colors.red
+        text-align: left
+
       &:hover
         box-shadow: 0 0 10px 0 rgba(0, 0, 0, .1)
         transform: scale(1.025)
-
-      &::after
-        cover()
-        background: linear-gradient(to bottom right, rgba($colors.black, .3) 0%, rgba($colors.black, .05) 50%, rgba($colors.black, 0) 100%)
-        content: ''
-        display: inline-block
-        z-index: -1
 
     &-client
       @extends h5
@@ -263,7 +269,7 @@ $duration = .5s
       margin: 0
 
     &-image
-      cover()
+      cover(-25%)
       z-index: -1
 
       picture,

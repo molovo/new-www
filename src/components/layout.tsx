@@ -3,32 +3,29 @@ import { defineCustomElements as deckDeckGoHighlightElement } from '@deckdeckgo/
 import Helmet from 'react-helmet'
 import Header from './layout/header'
 import Nav from './layout/nav'
-import Transition from '../assets/styles/layout/transition'
 import Footer from './layout/footer'
 import ContactForm from './contact-form'
 import { NavContext } from '../context/nav-context-provider'
+import smoothScroll from '../helpers/smooth-scroll'
 
-deckDeckGoHighlightElement()
+void deckDeckGoHighlightElement()
 
 interface Props {
   location: Location
   children: Array<ReactNode>
-  pageContext: PageContext
 }
 
-const Layout: React.FC<Props> = ({
-  location,
-  children,
-  pageContext,
-}: Props) => {
+const Layout = ({ location, children }: Props): JSX.Element => {
   const { closeNav } = useContext(NavContext)
   const { pathname } = location
 
-  const crumbs = pageContext.breadcrumbs?.crumbs
+  useEffect(() => {
+    smoothScroll()
+  }, [])
 
   useEffect(() => {
     closeNav()
-  }, [location])
+  }, [location, closeNav])
 
   const getBodyClassName = () => {
     let path = pathname
@@ -61,11 +58,10 @@ const Layout: React.FC<Props> = ({
           class: getBodyClassName(),
         }}
       />
-      <Header location={location} crumbs={crumbs} />
+      <Header />
       <Nav />
 
       <main className="main" role="main" data-header-modifier="red">
-        {/* <Transition location={location}>{children}</Transition> */}
         {children}
       </main>
 

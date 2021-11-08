@@ -1,37 +1,23 @@
 import { graphql, Link, PageProps } from 'gatsby'
-import { IGatsbyImageData } from 'gatsby-plugin-image'
 import React, { useContext, useEffect } from 'react'
 import Image from '../components/image'
 import { CurrentClientContext } from '../context/current-client-provider'
+import Article from '../types/article'
 
 interface DataProps {
   allMdx: {
-    nodes: [
-      {
-        excerpt: string
-        timeToRead: number
-        frontmatter: {
-          title: string
-          image: {
-            childImageSharp: {
-              gatsbyImageData: IGatsbyImageData
-            }
-          }
-        }
-        fields: {
-          date: Date
-          url: string
-        }
-      }
-    ]
+    nodes: Article[]
   }
 }
 
-const Writing = ({ data, location }: PageProps<DataProps, Location>) => {
+const Writing = ({
+  data,
+  location,
+}: PageProps<DataProps, Location>): JSX.Element => {
   const { setCurrentClient } = useContext(CurrentClientContext)
   useEffect(() => {
     setCurrentClient(null)
-  }, [location])
+  }, [location, setCurrentClient])
 
   return (
     <ul className="blog-index">
@@ -39,12 +25,16 @@ const Writing = ({ data, location }: PageProps<DataProps, Location>) => {
         ({
           excerpt,
           timeToRead,
+          slug,
           fields: { date, url },
-          frontmatter: { title, image },
+          frontmatter: { title, image, imageAltText },
         }) => (
-          <li className="blog-index__item">
+          <li className="blog-index__item" key={slug}>
             <div className="blog-index__item-meta">
-              <time className="blog-index__item-date" dateTime={date}>
+              <time
+                className="blog-index__item-date"
+                dateTime={new Date(date).toISOString()}
+              >
                 {date}
               </time>
               <span className="blog-index__item-time-to-read">
@@ -54,7 +44,11 @@ const Writing = ({ data, location }: PageProps<DataProps, Location>) => {
 
             <div className="blog-index__item-image-wrapper">
               {image && (
-                <Image image={image} className="blog-index__item-image" />
+                <Image
+                  image={image}
+                  alt={imageAltText}
+                  className="blog-index__item-image"
+                />
               )}
             </div>
 
@@ -81,20 +75,7 @@ export const query = graphql`
       sort: { fields: frontmatter___date, order: DESC }
     ) {
       nodes {
-        excerpt
-        timeToRead
-        frontmatter {
-          title
-          image {
-            childImageSharp {
-              gatsbyImageData(layout: FIXED)
-            }
-          }
-        }
-        fields {
-          date
-          url
-        }
+        ...Article
       }
     }
   }

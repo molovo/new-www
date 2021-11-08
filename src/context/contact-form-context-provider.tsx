@@ -1,4 +1,11 @@
-import React, { createContext, PropsWithChildren, ReactNode } from 'react'
+import React, {
+  createContext,
+  PropsWithChildren,
+  ReactNode,
+  useCallback,
+  useEffect,
+  useRef,
+} from 'react'
 import { useState } from 'reinspect'
 import animate from '../helpers/animate'
 import { easeOutQuad } from '../helpers/easing-functions'
@@ -13,53 +20,58 @@ export const ContactFormContext = createContext({
 
 export const ContactFormContextProvider = ({
   children,
-}: PropsWithChildren<ReactNode>) => {
+}: PropsWithChildren<ReactNode>): JSX.Element => {
+  const contactForm = useRef<HTMLElement | null>(null)
   const [contactFormOpen, setContactFormOpen] = useState(
     false,
     'Contact Form Open'
   )
 
+  useEffect(() => {
+    if (!contactForm.current) {
+      contactForm.current = document.getElementById('contact-form')
+    }
+  }, [contactForm])
+
   const toggleContactForm = () => {
     setContactFormOpen(open => !open)
   }
 
-  const openContactForm = () => {
+  const openContactForm = useCallback(async () => {
+    window.scrollTo(0, getMaxScroll())
     setContactFormOpen(true)
-    setTimeout(() => {
-      animate(
+
+    await animate(
+      window.scrollY,
+      getMaxScroll(),
+      (t: number) => {
+        window.scrollTo(0, t)
+      },
+      750,
+      easeOutQuad
+    )
+
+    const messageField = document.getElementById('contact-form-message')
+    if (messageField) {
+      messageField.focus()
+    }
+  }, [])
+
+  const closeContactForm = useCallback(async () => {
+    if (contactForm.current) {
+      await animate(
         window.scrollY,
-        getMaxScroll(),
-        t => {
-          window.scrollTo(0, t)
-        },
-        1500,
-        easeOutQuad
-      )
-
-      const messageField = document.getElementById('contact-form-message')
-      if (messageField) {
-        messageField.focus()
-      }
-    }, 10)
-  }
-
-  const closeContactForm = () => {
-    const contactForm = document.getElementById('contact-form')
-
-    if (contactForm) {
-      animate(
-        window.pageYOffset,
         getMaxScroll() - window.innerHeight * 2 - 1,
-        t => {
+        (t: number) => {
           window.scrollTo(0, t)
         },
         750,
         easeOutQuad
-      ).then(_ => {
+      ).then(() => {
         setContactFormOpen(false)
       })
     }
-  }
+  }, [])
 
   return (
     <ContactFormContext.Provider

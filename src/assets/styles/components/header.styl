@@ -1,3 +1,34 @@
+$themes = {
+  black: {
+    left: $colors.black,
+    right: $colors.black
+  },
+  'black-red': {
+    left: $colors.black,
+    right: $colors.red
+  },
+  'black-white': {
+    left: $colors.black,
+    right: $colors.white
+  },
+  red: {
+    left: $colors.red,
+    right: $colors.red
+  },
+  'red-white': {
+    left: $colors.red,
+    right: $colors.white
+  },
+  'white-red': {
+    left: $colors.white,
+    right: $colors.red
+  },
+  white: {
+    left: $colors.white,
+    right: $colors.white
+  },
+}
+
 .header
   align-items center
   color: $colors.red
@@ -5,6 +36,7 @@
   justify-content flex-end
   left: 0
   padding: $baseline $baseline $baseline ($baseline * 2)
+  pointer-events: none
   position: fixed
   top: 0
   transition: color .5s ease-in-out
@@ -19,8 +51,10 @@
 
   &__home
     color: inherit
+    display: block
     font-size: 1.125em
     margin-right: ($baseline / 2)
+    pointer-events: all
     text-decoration: none
 
     .logo
@@ -28,41 +62,22 @@
       margin: .5em 0
       width: $baseline * 1.5
 
+  &__breadcrumb
+    margin-top: .25em
+    transition: opacity .5s ease
+
+    &[aria-hidden="true"]
+      opacity: 0
+      pointer-events: none
+
   &__nav-toggle
     margin-left: auto
-
-  &--white
-    color: $colors.white
-
-    .breadcrumb
-      color: $colors.white
-
-  &--white-red
-    .header__home,
-    .breadcrumb
-      color: $colors.white
-
-  &--black-red
-    .header__home,
-    .breadcrumb
-      color: $colors.black
-
-  &--red-white
-    .nav-toggle
-      color: $colors.white
-
-  &--black-white
-    .header__home,
-    .breadcrumb
-      color: $colors.black
-
-    .nav-toggle
-      color: $colors.white
+    pointer-events: all
 
   &__contact-form-close
     align-items: center
     background: transparent
-    border: 2px solid $colors.white
+    border: 2px solid currentColor
     border-radius: 50%
     color: $colors.white
     display: inline-flex
@@ -70,4 +85,21 @@
     height: ($baseline * 1.25)
     justify-content: center
     margin-left: auto
+    pointer-events: all
     width: ($baseline * 1.25)
+
+  &__home,
+  .breadcrumb,
+  .nav-toggle,
+  &__contact-form-close
+    transition: color .5s ease
+
+  for $theme, $themeColours in $themes
+    &--{$theme}
+      .header__home,
+      .breadcrumb
+        color: $themeColours.left
+
+      .nav-toggle,
+      .header__contact-form-close
+        color: $themeColours.right

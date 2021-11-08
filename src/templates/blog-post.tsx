@@ -1,62 +1,37 @@
 import React, { useContext, useEffect } from 'react'
-import { Link, graphql, PageProps } from 'gatsby'
+import { graphql, PageProps } from 'gatsby'
 
 import { MDXProvider } from '@mdx-js/react'
 import { MDXRenderer } from 'gatsby-plugin-mdx'
-import { IGatsbyImageData } from 'gatsby-plugin-image'
 import Image from '../components/image'
 import Seo from '../components/seo'
 import { CurrentClientContext } from '../context/current-client-provider'
-
-const shortcodes = { Image }
-
-interface SiblingDataProps {
-  frontmatter: {
-    title: string
-  }
-  fields: {
-    url: string
-  }
-}
+import Article from '../types/article'
+import PostSibling from '../types/post-sibling'
+import MdxOverrides from '../components/mdx-overrides'
+import { TitleContext } from '../context/title-context'
+import NextPost from '../components/next-post'
 
 interface DataProps {
-  previous?: SiblingDataProps
-  next?: SiblingDataProps
-  mdx: {
-    id: string
-    excerpt: string
-    body: string
-    frontmatter: {
-      title: string
-      date: Date
-      description: string
-      embeddedImagesLocal: {
-        childImageSharp: {
-          gatsbyImageData: IGatsbyImageData
-        }
-      }
-      image: {
-        childImageSharp: {
-          gatsbyImageData: IGatsbyImageData
-        }
-      }
-      imageAltText: string
-      imageFullSize: boolean
-    }
-  }
+  previous?: PostSibling
+  next?: PostSibling
+  mdx: Article
 }
 
 const BlogPostTemplate = ({
   data,
   location,
-}: PageProps<DataProps, Location>) => {
+}: PageProps<DataProps, Location>): JSX.Element => {
   const post = data.mdx
-  const { previous, next } = data
+  const { next } = data
+
+  const { setTitle } = useContext(TitleContext)
+  setTitle(post.frontmatter.title)
 
   const { setCurrentClient } = useContext(CurrentClientContext)
   useEffect(() => {
     setCurrentClient(null)
-  }, [location, post.slug])
+  }, [location, post.slug, setCurrentClient])
 
   return (
     <>
@@ -69,6 +44,10 @@ const BlogPostTemplate = ({
         className="blog-post"
         itemScope
         itemType="https://schema.org/Article"
+        data-header-modifier={post.frontmatter.headerModifier || 'red'}
+        data-header-modifier-mobile={
+          post.frontmatter.headerModifierMobile || 'red'
+        }
       >
         {post.frontmatter.image && (
           <Image
@@ -79,6 +58,12 @@ const BlogPostTemplate = ({
                 ? 'blog-post__header-image--full-size'
                 : ''
             }`}
+            // eslint-disable-next-line react/jsx-props-no-spreading
+            {...(post.frontmatter.imageFullSize && {
+              'data-header-modifier': post.frontmatter.headerModifier,
+              'data-header-modifier-mobile':
+                post.frontmatter.headerModifierMobile,
+            })}
           />
         )}
 
@@ -90,7 +75,7 @@ const BlogPostTemplate = ({
         </header>
 
         <div className="blog-post__content">
-          <MDXProvider components={shortcodes}>
+          <MDXProvider components={MdxOverrides}>
             <MDXRenderer
               frontmatter={post.frontmatter}
               images={post.frontmatter.embeddedImagesLocal}
@@ -101,7 +86,9 @@ const BlogPostTemplate = ({
         </div>
       </article>
 
-      <nav className="blog-post-nav">
+      {next ? <NextPost post={next} /> : null}
+
+      {/* <nav className="blog-post-nav">
         <ul
           style={{
             display: 'flex',
@@ -126,7 +113,7 @@ const BlogPostTemplate = ({
             )}
           </li>
         </ul>
-      </nav>
+      </nav> */}
     </>
   )
 }
@@ -145,44 +132,13 @@ export const pageQuery = graphql`
       }
     }
     mdx(id: { eq: $id }) {
-      id
-      excerpt(pruneLength: 160)
-      body
-      frontmatter {
-        title
-        date(formatString: "MMMM DD, YYYY")
-        description
-        embeddedImagesLocal {
-          childImageSharp {
-            gatsbyImageData(layout: FULL_WIDTH)
-          }
-        }
-        image {
-          childImageSharp {
-            gatsbyImageData(layout: FULL_WIDTH)
-          }
-        }
-        imageAltText
-        imageFullSize
-        headerModifier
-        headerModifierMobile
-      }
+      ...Article
     }
     previous: mdx(id: { eq: $previousPostId }) {
-      frontmatter {
-        title
-      }
-      fields {
-        url
-      }
+      ...PostSibling
     }
     next: mdx(id: { eq: $nextPostId }) {
-      frontmatter {
-        title
-      }
-      fields {
-        url
-      }
+      ...PostSibling
     }
   }
 `

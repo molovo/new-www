@@ -1,4 +1,4 @@
-const getMaxScroll = () =>
+const getMaxScroll = (): number =>
   Math.max(
     document.body.scrollHeight,
     document.documentElement.scrollHeight,

@@ -2,16 +2,13 @@ import React from 'react'
 import { MDXProvider } from '@mdx-js/react'
 import { MDXRenderer } from 'gatsby-plugin-mdx'
 import StudySection from '../../types/study-section'
-import Image from '../image'
-import ImageWall from '../image-wall'
+import MdxOverrides from '../mdx-overrides'
 
 interface Props {
   section: StudySection
 }
 
-const shortcodes = { Image, ImageWall }
-
-const Section = ({ section }: Props) => {
+const Section = ({ section }: Props): JSX.Element => {
   const title = section.frontmatter.title.replace(
     /_([^_]+)_/g,
     '<span class="swash">$1</span>'
@@ -20,9 +17,12 @@ const Section = ({ section }: Props) => {
   return (
     <section
       className={`case-study__section case-study__section--${section.fields.slug}`}
+      id={section.fields.slug}
       key={section.fields.slug}
       style={{
         background: section.frontmatter.bgColor,
+        color: section.frontmatter.color,
+        ...(section.frontmatter.removeBottomPadding && { paddingBottom: 0 }),
       }}
       data-header-modifier={section.frontmatter.headerModifier}
       data-header-modifier-mobile={section.frontmatter.headerModifierMobile}
@@ -32,7 +32,10 @@ const Section = ({ section }: Props) => {
           className="case-study__section-background"
           style={{
             backgroundImage: `url(
-              ${section.frontmatter.bgImage?.childImageSharp?.gatsbyImageData?.images?.fallback?.src}
+              ${
+                section.frontmatter.bgImage?.childImageSharp?.gatsbyImageData
+                  ?.images?.fallback?.src || ''
+              }
             )`,
             opacity: section.frontmatter.bgImageOpacity || '1',
             backgroundPosition: section.frontmatter.bgImagePosition || 'center',
@@ -43,16 +46,20 @@ const Section = ({ section }: Props) => {
         />
       )}
 
+      <span className="case-study__section-name">
+        {section.frontmatter.name}
+      </span>
+
       <h2
         className="case-study__section-title"
         style={{
           color: section.frontmatter.titleColor,
         }}
-        dangerouslySetInnerHTML={{ __html: title }}
+        dangerouslySetInnerHTML={{ __html: title }} // eslint-disable-line react/no-danger
       />
 
       <div className="case-study__section-content">
-        <MDXProvider components={shortcodes}>
+        <MDXProvider components={MdxOverrides}>
           <MDXRenderer
             frontmatter={section.frontmatter}
             images={section.frontmatter.embeddedImagesLocal}

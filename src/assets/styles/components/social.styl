@@ -1,0 +1,25 @@
+.social
+  align-items: center
+  color: inherit
+  display: inline-flex
+  justify-content: flex-start
+
+  &__item
+    flex: 0 0 ($baseline / 1.5)
+    list-style: none
+    margin: 0 ($baseline / 4)
+
+    &:first-child
+      margin-left: 0
+
+    &:last-child
+      margin-right: 0
+
+  &__icon
+    color: inherit
+
+    svg
+      width: 100%
+
+      path
+        fill: currentColor

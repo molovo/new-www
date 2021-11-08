@@ -6,10 +6,10 @@
   z-index: 1
 
   @media (min-width: $breakpoints.tablet)
-    padding: 0 ($baseline * 2) ($baseline * 2)
+    padding: 0 ($baseline * 2)
 
   @media (min-width: $breakpoints.desktop)
-    padding: 0 ($baseline * 3) ($baseline * 3)
+    padding: 0 ($baseline * 3)
 
   &__header-image
     padding: 0 $baseline $baseline
@@ -44,11 +44,15 @@
     position: relative
     width: calc(100% + 10.5em)
 
+    &:last-child
+      margin-bottom: 0
+
     .image__caption
       font-size: .75em
       left: 100%
-      opacity .7
+      line-height: $baseline
       margin-left: $baseline
+      opacity .7
       position: absolute
       top: 0
       width: 15em
@@ -59,6 +63,9 @@
       position: relative
       transform: translateX(-50%)
       width: calc(100vw - 1.5em)
+
+      &.image--with-caption
+        margin-bottom: ($baseline * 5)
 
       .image__caption
         font-size: .75em
@@ -78,6 +85,44 @@
       > div > div
         max-width: 100%
 
+    &--with-padding
+      padding: 0 $baseline
+
+      @media (min-width: $breakpoints.tablet)
+        padding: 0 ($baseline * 2)
+
+      @media (min-width: $breakpoints.desktop)
+        padding: 0 ($baseline * 3)
+
   deckgo-highlight-code
-    margin: 0 0 $baseline
     box-shadow: 0 0 10px 0 rgba($colors.black, .4)
+    margin: 0 0 $baseline
+
+  div.container
+    code
+      font-family: $fonts.mono
+
+.next-post
+  color: inherit
+  display: block
+  padding: $baseline 0 0
+  text-align: center
+  text-decoration: none
+
+  @media (min-width: $breakpoints.tablet)
+    padding: ($baseline * 2) 0 0
+
+  @media (min-width: $breakpoints.desktop)
+    padding: ($baseline * 3) 0 0
+
+  &__heading,
+  &__title
+    display block
+
+  &__heading
+    @extend h5
+    margin: 0
+
+  &__title
+    @extend h2
+    color: $colors.red

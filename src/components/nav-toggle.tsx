@@ -1,4 +1,4 @@
-import React, { PropsWithChildren, useContext } from 'react'
+import React, { useContext } from 'react'
 import { NavContext } from '../context/nav-context-provider'
 
 interface Props {

@@ -20,18 +20,23 @@
     padding: ($baseline * 3)
 
   &[aria-hidden="true"]
-    display none
+    display: none
     opacity: 0
     pointer-events: none
+
+  &__title
+    @extend h1
+    max-width: 7em
 
   &__form
     max-width: 36em
     width: 100%
 
-  .form__label[for="contact-form-message"]
-    @extend h2
-    margin: 0
-    text-transform: none
+  label[for="contact-form-message"]
+    .form__label
+      @extend h1
+      margin: 0
+      text-transform: none
 
   .form__input
     line-height: ($baseline * 1.5)

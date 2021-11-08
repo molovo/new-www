@@ -16,11 +16,13 @@ module.exports = {
     description: `Hi, I'm James. I make websites`,
     siteUrl: `https://molovo.co/`,
     social: {
-      twitter: `molovo`,
       github: `molovo`,
+      twitter: `molovo`,
+      dribbble: `molovo`,
     },
   },
   plugins: [
+    `gatsby-plugin-ts`,
     {
       resolve: `gatsby-plugin-stylus`,
       options: {
@@ -163,6 +165,12 @@ module.exports = {
         // trailingSlashes: optional, will add trailing slashes to the end
         // of crumb pathnames. default is false
         trailingSlashes: false,
+      },
+    },
+    {
+      resolve: `gatsby-plugin-plausible`,
+      options: {
+        domain: `molovo.co`,
       },
     },
   ],

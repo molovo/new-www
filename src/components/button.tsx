@@ -3,37 +3,38 @@
 import { Link } from 'gatsby'
 import React from 'react'
 
-interface Props {
+interface Props extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   label: string
   url?: string
   label_a11y?: string
   className?: string
+  onClick?: () => void
   styles?: Array<string>
   type?: 'button' | 'submit' | 'reset'
 }
 
-const Button: React.FC<Props> = ({
+const Button = ({
   label,
   url,
   label_a11y,
-  className,
+  className = '',
+  onClick = () => {},
   styles = [],
   type = 'button',
-  ...props
-}: Props) => {
+}: Props): JSX.Element => {
   const styleClasses = styles.map(style => `button--${style}`).join(' ')
   const classNameToUse = `button ${styleClasses} ${className}`
 
   if (url === undefined) {
     return (
-      <button type={type} className={classNameToUse} {...props}>
+      <button type={type} className={classNameToUse} onClick={onClick}>
         {label}
       </button>
     )
   }
 
   return (
-    <Link className={classNameToUse} to={url} {...props}>
+    <Link className={classNameToUse} to={url}>
       {label_a11y && (
         <span className="screenreader-text button__label-a11y">
           {label_a11y}

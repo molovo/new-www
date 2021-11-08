@@ -1,6 +1,6 @@
 import React from 'react'
 
-const EighteenFiftyFiveLogo = () => (
+const EighteenFiftyFiveLogo = (): JSX.Element => (
   <svg
     version="1.0"
     width="822.000000pt"

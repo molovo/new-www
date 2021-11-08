@@ -1,45 +1,26 @@
 /* eslint-disable react/jsx-props-no-spreading */
 
 import React, { useCallback, useContext, useEffect } from 'react'
-import { Link, graphql, PageProps } from 'gatsby'
+import { graphql, PageProps } from 'gatsby'
 
 import { MDXProvider } from '@mdx-js/react'
 import { MDXRenderer } from 'gatsby-plugin-mdx'
-import { IGatsbyImageData } from 'gatsby-plugin-image'
-import Image from '../components/image'
 import Seo from '../components/seo'
 import { CurrentClientContext } from '../context/current-client-provider'
 import { animator } from '../helpers/animator'
 import Study from '../types/study'
-import PageHeader from '../components/page-header'
+import PageHeader, { PageHeaderRef } from '../components/page-header'
 import StudySection from '../types/study-section'
-import StudyLogos from '../components/study/logos'
 import NextCaseStudy from '../components/next-case-study'
 import Section from '../components/study/section'
-import CaseStudyOutLink from '../components/study/out-link'
-
-const shortcodes = { Image }
-
-interface SiblingDataProps {
-  slug
-  frontmatter: {
-    client: string
-    title: string
-    image: {
-      childImageSharp: {
-        gatsbyImageData: IGatsbyImageData
-      }
-    }
-  }
-  fields: {
-    url: string
-  }
-}
+import CaseStudyNav from '../components/study/nav'
+import PostSibling from '../types/post-sibling'
+import MdxOverrides from '../components/mdx-overrides'
 
 interface DataProps {
-  previous?: SiblingDataProps
-  next?: SiblingDataProps
-  mdx: Study
+  previous?: PostSibling
+  next?: PostSibling
+  study: Study
   sections: {
     nodes: Array<StudySection>
   }
@@ -54,13 +35,13 @@ const CaseStudyTemplate: React.FC<PageProps<DataProps, Location>> = ({
   const { setCurrentClient } = useContext(CurrentClientContext)
   useEffect(() => {
     setCurrentClient(study.slug)
-  }, [location, study.slug])
+  }, [location, study.slug, setCurrentClient])
 
-  const setRef = ref => {
+  const setRef = useCallback((ref: PageHeaderRef) => {
     if (ref && 'section' in ref) {
       animator(ref.section)
     }
-  }
+  }, [])
 
   return (
     <>
@@ -76,13 +57,14 @@ const CaseStudyTemplate: React.FC<PageProps<DataProps, Location>> = ({
       >
         <PageHeader
           ref={setRef}
+          title={study.frontmatter.client}
           study={study}
           headerModifier={study.frontmatter?.headerModifier || 'white'}
           headerModifierMobile={
             study.frontmatter?.headerModifierMobile || 'white'
           }
         >
-          <MDXProvider components={shortcodes}>
+          <MDXProvider components={MdxOverrides}>
             <MDXRenderer
               frontmatter={study.frontmatter}
               images={study.frontmatter.embeddedImagesLocal}
@@ -103,11 +85,11 @@ const CaseStudyTemplate: React.FC<PageProps<DataProps, Location>> = ({
           </dl>
         </PageHeader>
 
-        {sections.nodes.map(section => (
-          <Section section={section} key={section.slug} />
-        ))}
+        <CaseStudyNav sections={sections.nodes} />
 
-        <CaseStudyOutLink study={study} />
+        {sections.nodes.map(section => (
+          <Section section={section} key={section.fields.slug} />
+        ))}
       </article>
 
       {next && <NextCaseStudy study={next} />}
@@ -130,75 +112,13 @@ export const pageQuery = graphql`
       }
     }
     study: mdx(id: { eq: $id }) {
-      slug
-      body
-      timeToRead
-      frontmatter {
-        title
-        client
-        url
-        role
-        year
-        description
-        thumbnail {
-          childImageSharp {
-            gatsbyImageData(layout: FULL_WIDTH)
-          }
-        }
-        image {
-          childImageSharp {
-            gatsbyImageData(layout: FULL_WIDTH)
-          }
-        }
-        embeddedImagesLocal {
-          publicURL
-          childImageSharp {
-            gatsbyImageData(layout: FULL_WIDTH)
-          }
-        }
-        order
-        headerModifier
-        headerModifierMobile
-        bgColor
-        titleColor
-        ctaFontSize
-        ctaMaxWidth
-        ctaButtonStyles
-      }
-      fields {
-        url
-        type
-      }
+      ...Study
     }
     previous: mdx(id: { eq: $previousPostId }) {
-      slug
-      frontmatter {
-        title
-        client
-        image {
-          childImageSharp {
-            gatsbyImageData(layout: FULL_WIDTH)
-          }
-        }
-      }
-      fields {
-        url
-      }
+      ...PostSibling
     }
     next: mdx(id: { eq: $nextPostId }) {
-      slug
-      frontmatter {
-        title
-        client
-        image {
-          childImageSharp {
-            gatsbyImageData(layout: FULL_WIDTH)
-          }
-        }
-      }
-      fields {
-        url
-      }
+      ...PostSibling
     }
     sections: allMdx(
       sort: { fields: [fields___order], order: ASC }
@@ -207,35 +127,7 @@ export const pageQuery = graphql`
       }
     ) {
       nodes {
-        body
-        frontmatter {
-          title
-          client
-          embeddedImagesLocal {
-            publicURL
-            childImageSharp {
-              gatsbyImageData(layout: FULL_WIDTH)
-            }
-          }
-          bgColor
-          bgImage {
-            childImageSharp {
-              gatsbyImageData(layout: FULL_WIDTH)
-            }
-          }
-          bgImageBlendMode
-          bgImageOpacity
-          bgImagePosition
-          bgImageSize
-          bgImageRepeat
-          color
-          titleColor
-          headerModifier
-          headerModifierMobile
-        }
-        fields {
-          slug
-        }
+        ...StudySection
       }
     }
   }

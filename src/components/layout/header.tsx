@@ -1,10 +1,6 @@
-import React, { useContext, useEffect, useRef } from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import { Link } from 'gatsby'
 import { LiveNodeList } from 'live-node-list'
-import { useState } from 'reinspect'
-import { Breadcrumb } from 'gatsby-plugin-breadcrumb'
-// eslint-disable-next-line import/no-extraneous-dependencies
-import { sentenceCase } from 'sentence-case'
 import Logo from '../images/icons/logo'
 import NavToggle from '../nav-toggle'
 import { NavContext } from '../../context/nav-context-provider'
@@ -12,44 +8,32 @@ import { CurrentClientContext } from '../../context/current-client-provider'
 import StudyLogos from '../study/logos'
 import { ContactFormContext } from '../../context/contact-form-context-provider'
 
-interface PageProps {
-  location: Location
-  crumbs: Array<{ pathname: string, crumbLabel: string }>
-}
-
-const modifiers = {
-  red: 'red',
-  'white-red': 'white-red',
-  'red-white': 'red-white',
+export const Modifiers = {
+  black: 'black',
   'black-red': 'black-red',
   'black-white': 'black-white',
-  black: 'black',
+  red: 'red',
+  'red-white': 'red-white',
   white: 'white',
+  'white-red': 'white-red',
 }
 
-const Header: React.FC<PageProps> = ({ location, crumbs }: PageProps) => {
+export type Modifier = keyof typeof Modifiers
+
+const Header = (): JSX.Element => {
   const { navOpen, closeNav } = useContext(NavContext)
   const { currentClient } = useContext(CurrentClientContext)
   const { contactFormOpen, closeContactForm } = useContext(ContactFormContext)
 
-  const [, setState] = useState(false, 'Header render trigger')
-  const [padding, setPadding] = useState(4.5, 'Header padding')
-  const [modifier, setModifier] = useState(modifiers.red, 'Header modifier')
+  const [padding, setPadding] = useState(4.5)
+  const [modifier, setModifier] = useState(Modifiers.red)
 
-  const ref = useRef()
-  const modifierElements = useRef()
-
-  if (crumbs) {
-    // eslint-disable-next-line no-param-reassign
-    crumbs = crumbs.map(({ pathname, crumbLabel }) => ({
-      pathname,
-      crumbLabel: sentenceCase(crumbLabel),
-    }))
-  }
+  const ref = useRef<HTMLElement>(null)
+  const modifierElements = useRef<typeof LiveNodeList | null>(null)
 
   const setHeaderModifier = () => {
     if (navOpen) {
-      setModifier(modifiers.white)
+      setModifier(Modifiers.white)
 
       return
     }
@@ -69,7 +53,11 @@ const Header: React.FC<PageProps> = ({ location, crumbs }: PageProps) => {
       while (
         element &&
         element.getBoundingClientRect().top >
-          50 + parseInt(element.dataset.headerModifierOffset || 0, 10)
+          50 +
+            parseInt(
+              (element.dataset.headerModifierOffset as string) || '0',
+              10
+            )
       ) {
         i -= 1
         element = items[i]
@@ -81,48 +69,55 @@ const Header: React.FC<PageProps> = ({ location, crumbs }: PageProps) => {
           window.matchMedia('(max-width: 60em)').matches
         ) {
           setModifier(
-            modifiers[element.dataset.headerModifierMobile] || modifiers.red
+            Modifiers[element.dataset.headerModifierMobile as Modifier] ||
+              Modifiers.red
           )
 
           return
         }
 
-        setModifier(modifiers[element.dataset.headerModifier] || modifiers.red)
+        setModifier(
+          Modifiers[element.dataset.headerModifier as Modifier] || Modifiers.red
+        )
       }
     })
   }
 
   const setHeaderPadding = () => {
     const pct = window.pageYOffset / (window.innerHeight / 2)
-    setPadding(Math.max(1.5, 4.5 - 3 * pct))
+    const newPadding = Math.max(1.5, 4.5 - 3 * pct)
+
+    if (newPadding !== padding) {
+      setPadding(newPadding)
+    }
   }
 
   useEffect(() => {
     setHeaderPadding()
     window.addEventListener('scroll', setHeaderPadding, { passive: true })
 
-    modifierElements.current = new LiveNodeList('[data-header-modifier]')
-    modifierElements.current.on('update', () => {
+    if (!modifierElements.current) {
+      modifierElements.current = new LiveNodeList('[data-header-modifier]')
+      modifierElements.current.on('update', () => {
+        setHeaderModifier()
+      })
+
       setHeaderModifier()
-    })
+      modifierElements.current.addDelegatedEventListener(
+        window,
+        'scroll',
+        setHeaderModifier
+      )
+    }
 
-    setHeaderModifier()
-    modifierElements.current.addDelegatedEventListener(
-      window,
-      'scroll',
-      setHeaderModifier
-    )
+    return () => {
+      window.removeEventListener('scroll', setHeaderPadding)
+    }
   })
-
-  useEffect(() => {
-    setState(value => !value)
-  }, [location, currentClient, setState])
 
   return (
     <header
-      className={`header header--${modifier} ${
-        navOpen ? 'header--white' : null
-      }`}
+      className={`header header--${modifier} ${navOpen ? 'header--white' : ''}`}
       role="banner"
       ref={ref}
       style={{ paddingTop: `${padding}em` }}
@@ -134,10 +129,6 @@ const Header: React.FC<PageProps> = ({ location, crumbs }: PageProps) => {
           <Logo />
         )}
       </Link>
-
-      {crumbs && !navOpen && !contactFormOpen && (
-        <Breadcrumb location={location} crumbs={crumbs} hiddenCrumbs={['/']} />
-      )}
 
       {contactFormOpen ? (
         <button

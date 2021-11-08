@@ -1,8 +1,10 @@
 .article--the-view-from-above
   .main
+    noiseTransparent()
     background: $colors.black
     color: $colors.white
     padding-top: 30vw
+    position relative
 
     > div > div
       transform: none !important
@@ -11,6 +13,8 @@
     position: static
 
     &__header-image
+      left: ($baseline * -1)
+
       &::after
         background: linear-gradient(to bottom, transparent 0%, $colors.black 100%)
         bottom: 0
@@ -28,3 +32,4 @@
       letter-spacing: normal
       line-height: .625em
       margin: 0
+      text-align: center

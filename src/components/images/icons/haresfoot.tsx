@@ -1,6 +1,6 @@
 import React from 'react'
 
-const HaresfootLogo = () => (
+const HaresfootLogo = (): JSX.Element => (
   <svg
     viewBox="0 0 159.000000 140.000000"
     className="study__icon study__icon--haresfoot"

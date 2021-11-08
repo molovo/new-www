@@ -1,14 +1,14 @@
 import { Link } from 'gatsby'
 import React from 'react'
+import PostSibling from '../types/post-sibling'
 import Study from '../types/study'
 import StudyLogos from './study/logos'
 
 interface Props {
-  study: Study
+  study: Study | PostSibling
 }
 
-const NextCaseStudy = ({ study }: Props) => {
-  console.log(study)
+const NextCaseStudy = ({ study }: Props): JSX.Element => {
   const maskImage = study.frontmatter?.image?.childImageSharp?.gatsbyImageData
     ?.images?.fallback?.src
     ? `image(url(${study.frontmatter?.image?.childImageSharp?.gatsbyImageData?.images?.fallback?.src}))`
@@ -18,7 +18,7 @@ const NextCaseStudy = ({ study }: Props) => {
       <span
         className="next-case-study__client"
         style={{
-          maskImage: maskImage || null,
+          maskImage: maskImage || undefined,
         }}
       >
         {[1, 2, 3].map(i => (

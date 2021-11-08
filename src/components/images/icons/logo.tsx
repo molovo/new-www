@@ -1,6 +1,6 @@
 import React from 'react'
 
-const Logo = () => (
+const Logo = (): JSX.Element => (
   <svg version="1.1" className="logo" viewBox="0 -8.5 100 42">
     <path
       className="logo__frame"

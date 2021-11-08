@@ -6,21 +6,21 @@ import React from 'react'
 interface Props {
   url: string
   label: string
-  label_a11y: string
-  className: string
-  styles: Array<string>
-  type: 'button' | 'submit' | 'reset'
+  label_a11y?: string
+  className?: string
+  styles?: Array<string>
+  type?: 'button' | 'submit' | 'reset'
 }
 
-const TextLink: React.FC<Props> = ({
+const TextLink = ({
   url,
   label,
   label_a11y = undefined,
-  className = undefined,
+  className = '',
   styles = [],
   type = 'button',
   ...props
-}: Props) => {
+}: Props): JSX.Element => {
   const styleClasses = styles.map(style => `text-link--${style}`).join(' ')
   const classNameToUse = `text-link ${styleClasses} ${className}`
 

@@ -6,8 +6,20 @@ cover($offset = 0)
   top: $offset
 
 hideScrollbars()
-  -ms-overflow-style: none;  /* IE and Edge */
-  scrollbar-width: none;  /* Firefox */
+  -ms-overflow-style: none  // IE and Edge
+  scrollbar-width: none  // Firefox
 
-  ::-webkit-scrollbar
+  &::-webkit-scrollbar
     display: none
+
+noise()
+  mask-clip: no-clip
+  mask-image: url(/knockout.png)
+  mask-position: center
+  mask-repeat: repeat
+  mask-size: 100%
+  mask-type: alpha
+
+noiseTransparent()
+  noise()
+  mask-image: url(/knockout-transparent.png)

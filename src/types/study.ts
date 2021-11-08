@@ -1,9 +1,13 @@
 import { IGatsbyImageData } from 'gatsby-plugin-image'
+import CSS from 'csstype'
+import { graphql } from 'gatsby'
+import { Modifier } from '../components/layout/header'
 
 interface Study {
   id: string
   slug: string
   body: string
+  excerpt: string
   timeToRead: number
   frontmatter: {
     title: string
@@ -28,18 +32,63 @@ interface Study {
       }
     }>
     order: number
-    bgColor: string
-    titleColor: string
-    ctaFontSize: string
-    ctaMaxWidth: string
+    bgColor: CSS.Property.BackgroundColor
+    titleColor: CSS.Property.Color
+    ctaFontSize: CSS.Property.FontSize
+    ctaMaxWidth: CSS.Property.MaxWidth
     ctaButtonStyles: Array<string>
-    headerModifer: string
-    headerModifierMobile: string
+    headerModifier: Modifier
+    headerModifierMobile: Modifier
   }
   fields: {
     url: string
     type: string
   }
 }
+
+export const query = graphql`
+  fragment Study on Mdx {
+    id
+    slug
+    body
+    timeToRead
+    frontmatter {
+      title
+      client
+      url
+      role
+      year
+      description
+      thumbnail {
+        childImageSharp {
+          gatsbyImageData(layout: FULL_WIDTH)
+        }
+      }
+      image {
+        childImageSharp {
+          gatsbyImageData(layout: FULL_WIDTH)
+        }
+      }
+      embeddedImagesLocal {
+        publicURL
+        childImageSharp {
+          gatsbyImageData(layout: FULL_WIDTH)
+        }
+      }
+      order
+      headerModifier
+      headerModifierMobile
+      bgColor
+      titleColor
+      ctaFontSize
+      ctaMaxWidth
+      ctaButtonStyles
+    }
+    fields {
+      url
+      type
+    }
+  }
+`
 
 export default Study

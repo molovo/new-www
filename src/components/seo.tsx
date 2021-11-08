@@ -5,36 +5,45 @@
  * See: https://www.gatsbyjs.com/docs/use-static-query/
  */
 
-import React from 'react'
+import React, { MetaHTMLAttributes, useContext, useEffect } from 'react'
 import { Helmet } from 'react-helmet'
 import { useStaticQuery, graphql } from 'gatsby'
+import { TitleContext } from '../context/title-context'
+import SiteMetadata from '../types/site-metadata'
+
+interface MetaAttributes extends MetaHTMLAttributes<HTMLMetaElement> {
+  property?: string
+}
 
 interface Props {
   title: string
-  description: string
-  lang: string
-  meta: Array<{ name: string; content: any; property?: undefined }>
+  description?: string
+  lang?: string
+  meta?: MetaAttributes[]
 }
 
-const Seo = ({ title, description, lang = 'en', meta = [] }: Props) => {
-  const { site } = useStaticQuery(
+const Seo = ({
+  title,
+  description,
+  lang = 'en',
+  meta = [],
+}: Props): JSX.Element => {
+  const { site }: SiteMetadata = useStaticQuery(
     graphql`
       query {
-        site {
-          siteMetadata {
-            title
-            description
-            social {
-              twitter
-            }
-          }
-        }
+        ...SiteMetadata
       }
     `
   )
 
+  const { setTitle } = useContext(TitleContext)
+
   const metaDescription = description || site.siteMetadata.description
   const defaultTitle = site.siteMetadata?.title
+
+  useEffect(() => {
+    setTitle(title)
+  }, [title, setTitle])
 
   return (
     <Helmet
@@ -42,8 +51,8 @@ const Seo = ({ title, description, lang = 'en', meta = [] }: Props) => {
         lang,
       }}
       title={title}
-      titleTemplate={defaultTitle ? `%s | ${defaultTitle}` : null}
-      meta={[
+      titleTemplate={defaultTitle ? `%s | ${defaultTitle}` : undefined}
+      meta={([
         {
           name: 'description',
           content: metaDescription,
@@ -76,7 +85,7 @@ const Seo = ({ title, description, lang = 'en', meta = [] }: Props) => {
           name: 'twitter:description',
           content: metaDescription,
         },
-      ].concat(meta)}
+      ] as MetaAttributes[]).concat(meta)}
     />
   )
 }

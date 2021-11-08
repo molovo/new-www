@@ -1,6 +1,6 @@
 import React from 'react'
 
-const RedistributeLogo = () => (
+const RedistributeLogo = (): JSX.Element => (
   <svg viewBox="0 0 2000 2250" xmlns="http://www.w3.org/2000/svg">
     <g transform="translate(-2247.84-1e-05)">
       <g transform="matrix(-.666667 0 0 .75 4247.84 2.27374e-13)">

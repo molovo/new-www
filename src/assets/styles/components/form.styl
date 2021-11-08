@@ -1,8 +1,12 @@
 input,
 textarea,
 select
+  font: inherit
   padding: ($baseline / 4) 0
   width: 100%
+
+  &:disabled
+    opacity: 0.5
 
 textarea
   height: 18em
@@ -29,10 +33,6 @@ textarea
     &:focus
       outline: 0
 
-    &::placeholder
-      color: inherit
-      opacity: .5
-
   &__row
     align-items: flex-end
     display: flex
@@ -53,3 +53,7 @@ textarea
 
       @media (min-width: $breakpoints.tablet)
         flex: 0 0 auto
+
+::placeholder
+  color: inherit
+  opacity: .5

@@ -2,7 +2,7 @@ import React, {
   createContext,
   PropsWithChildren,
   ReactNode,
-  useEffect,
+  useCallback,
 } from 'react'
 import { useState } from 'reinspect'
 
@@ -14,23 +14,23 @@ export const NavContext = createContext({
 
 export const NavContextProvider = ({
   children,
-}: PropsWithChildren<ReactNode>) => {
+}: PropsWithChildren<ReactNode>): JSX.Element => {
   const [navOpen, setNavOpen] = useState(false, 'Nav Open')
 
-  const toggleNav = () => {
+  const toggleNav = useCallback(() => {
     setNavOpen(open => !open)
-  }
+  }, [])
 
-  const closeNav = () => {
+  const closeNav = useCallback(() => {
     // Blur all links to ensure focus-within styles aren't applied
     // after closing the nav
-    const link = document.activeElement
-    if (link.closest('.nav')) {
+    const link: HTMLElement = document.activeElement as HTMLElement
+    if (link.closest('.nav') && 'blur' in link) {
       link.blur()
     }
 
     setNavOpen(false)
-  }
+  }, [])
 
   return (
     <NavContext.Provider value={{ navOpen, toggleNav, closeNav }}>

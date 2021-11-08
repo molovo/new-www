@@ -1,0 +1,43 @@
+---
+name: Web
+title: Content comes _first_
+titleColor: '#8a3294'
+bgColor: '#edf2f4'
+headerModifier: red
+embeddedImagesLocal:
+  - ../../../../src/images/studies/redistribute/web-article-1.png
+  - ../../../../src/images/studies/redistribute/web-article-3.png
+  - ../../../../src/images/studies/redistribute/web-nav.png
+---
+
+import syncedParallax from '../../../../src/helpers/synced-parallax'
+
+<ImageGroup
+  images={[
+    {
+      ...props.images[0],
+      width: '50%',
+      sizes: '(min-width: 63.75em) 50vw, 100vw',
+    },
+    {
+      ...props.images[1],
+      width: '50%',
+      sizes: '(min-width: 63.75em) 50vw, 100vw',
+    },
+  ]}
+  alt="The article templates used on redistributemag.com"
+  caption="The article templates used on redistributemag.com"
+  fullWidth
+  withPadding
+  onScroll={(event, images) => {
+    syncedParallax(images)
+  }}
+/>
+
+<Image
+  image={props.images[2]}
+  alt="The main navigation on redistributemag.com"
+  caption="The main navigation on redistributemag.com"
+  fullWidth
+  withPadding
+/>

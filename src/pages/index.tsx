@@ -1,32 +1,14 @@
-import React, { forwardRef, useContext, useEffect, useRef } from 'react'
-import { Link, graphql, PageProps } from 'gatsby'
+import React, { useContext, useEffect } from 'react'
+import { graphql, PageProps } from 'gatsby'
 
-import { IGatsbyImageData } from 'gatsby-plugin-image'
 import { useState } from 'reinspect'
 import ItemLink from '../components/homepage/item-link'
-import HomepageCta from '../components/header-cta'
 import Button from '../components/button'
 import Seo from '../components/seo'
 import { CurrentClientContext } from '../context/current-client-provider'
-import isVisible from '../helpers/is-visible'
-import isInViewport from '../helpers/is-in-viewport'
-import HeaderCta from '../components/header-cta'
 import PageHeader from '../components/page-header'
 import Study from '../types/study'
-
-type PostProps = {
-  slug: string
-  timeToRead: number
-  frontmatter: {
-    title: string
-    description: string
-    order: number
-  }
-  fields: {
-    url: string
-    type: string
-  }
-}
+import Article from '../types/article'
 
 type ProjectProps = {
   slug: string
@@ -45,7 +27,7 @@ type DataProps = {
     }
   }
   posts: {
-    nodes: Array<PostProps>
+    nodes: Array<Article>
   }
   studies: {
     nodes: Array<Study>
@@ -69,36 +51,10 @@ const Home: React.FC<PageProps<DataProps, Location>> = ({
     setStudy(studies[0])
   }, [studies])
 
-  const pageHeader = useRef(null)
-
   const { setCurrentClient } = useContext(CurrentClientContext)
   useEffect(() => {
     setCurrentClient(null)
-  }, [location])
-
-  useEffect(() => {
-    const setClient = () => {
-      if (
-        !pageHeader.cta ||
-        !isVisible(pageHeader.cta) ||
-        !isInViewport(pageHeader.cta, { x: 0, y: -50 })
-      ) {
-        setCurrentClient(null)
-
-        return
-      }
-
-      setCurrentClient(study.slug)
-    }
-
-    setClient()
-
-    window.addEventListener('scroll', setClient, { passive: true })
-
-    return () => {
-      window.removeEventListener('scroll', setClient)
-    }
-  }, [study])
+  }, [location, setCurrentClient])
 
   return (
     <>
@@ -107,7 +63,7 @@ const Home: React.FC<PageProps<DataProps, Location>> = ({
         description={data.site.siteMetadata.description}
       />
 
-      <PageHeader ref={pageHeader} includeStudyLink study={study}>
+      <PageHeader includeStudyLink study={study}>
         <h1 className="home__title">
           Hi, I&apos;m James.
           <br />I make websites.
@@ -116,10 +72,10 @@ const Home: React.FC<PageProps<DataProps, Location>> = ({
         <p className="home__intro">
           I&apos;m currently leading the talented development team at{' '}
           <a href="https://superrb.com" target="_blank" rel="noreferrer">
-            Superrb Studio
+            Superrb
           </a>
-          , where I build awesome websites and interactive experiences{' '}
-          <Link to="/work">like these</Link>.
+          , where I build awesome websites and interactive experiences like
+          these.
         </p>
 
         <div className="home__links">
@@ -194,17 +150,7 @@ export const pageQuery = graphql`
       }
     ) {
       nodes {
-        slug
-        timeToRead
-        frontmatter {
-          title
-          description
-          order
-        }
-        fields {
-          url
-          type
-        }
+        ...Article
       }
     }
     studies: allMdx(
@@ -215,29 +161,7 @@ export const pageQuery = graphql`
       }
     ) {
       nodes {
-        slug
-        timeToRead
-        frontmatter {
-          title
-          client
-          description
-          thumbnail {
-            childImageSharp {
-              gatsbyImageData(layout: FIXED)
-            }
-          }
-          order
-          bgColor
-          ctaFontSize
-          ctaMaxWidth
-          ctaButtonStyles
-          headerModifier
-          headerModifierMobile
-        }
-        fields {
-          url
-          type
-        }
+        ...Study
       }
     }
     projects: allMdx(
